@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>轮播图</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+</head>
+<style>
+	body{
+		margin:0;
+	}
+	.box{
+		width:100%;
+		overflow:hidden;
+		border:1px solid #ccc;
+		box-scizing:border-box;
+	}
+	.son{
+		height:100%;
+	}
+	.son>div{
+		float:left;
+		/*如果有边框，图片下边会有空白，用line-height:0;或font-size:0;处理(是受line-height，font-size影响)*/
+		line-height:0;
+	}
+	img{
+		width:100%;
+	}
+</style>
+<body>
+	<div class="box">
+		<div class="son">
+			<div>
+				<img src="img/74.jpg" alt="">
+			</div>
+			<div>
+				<img src="img/75.jpg" alt="">
+			</div>
+			<div>
+				<img src="img/76.jpg" alt="">
+			</div>
+		</div>
+	</div>
+	<script>
+	var box=document.querySelector('.box');
+	var son=document.querySelector('.son');
+	var divs=document.querySelectorAll('.son div')
+	var cw=document.documentElement.clientWidth;
+	son.style.width=divs.length*cw+'px';
+	for(var i=0;i<divs.length;i++){
+		divs[i].style.width=cw+'px';
+	}
+	// 下标
+	var index=0;
+	var t=setInterval(w,1000);
+	function w(){
+		index++;
+		if(index==divs.length){
+			index=0;
+		}
+		son.style.transition='transform .3s'
+		son.style.transform='translate3d('+(-index*cw)+'px,0,0)';
+	}
+	son.addEventListener('touchstart',function(e){
+		clearInterval(t);
+		var th=e.targetTouches[0];
+		var ch=th.clientX;
+		var oh=0;
+		var dt=e.timeStamp;
+		son.style.transition='';
+		function move(e){
+			var th=e.targetTouches[0];
+			oh=th.clientX;
+			// oh-ch-index*cw是为了不让每次移动都从第一张开始
+			son.style.transform='translate3d('+(oh-ch-index*cw)+'px,0,0)';
+		}
+		function end(e){
+			var et=e.timeStamp;
+			var dh=Math.abs(e.changedTouches[0].clientX-ch);
+			console.log(dh);
+			son.style.transition='transform .3s'
+			if(Math.abs(oh-ch)>cw/2||(et-dt>100&&dh>30)){
+				if(oh-ch>0){
+					// 向右滑
+					index--;
+				}else{
+					// 向左滑
+					index++;
+				}
+				if(index==divs.length){
+					// 最后一张拉回来
+					index=divs.length-1;
+				}
+				if(index==-1){
+					// 第一张拉回来
+					index=0;
+				}
+				son.style.transform='translate3d('+-(index*cw)+'px,0,0)';
+			}else{
+				son.style.transform='translate3d('+-(index*cw)+'px,0,0)';
+			}
+			t=setInterval(w,1000);
+			// 移除end，move（每滑动会执行一次move，end）
+			son.removeEventListener('touchmove',move);
+			son.removeEventListener('touchend',end);
+		}
+		window.addEventListener('touchmove',move);
+		son.addEventListener('touchend',end);
+	})
+	</script>
+</body>
+</html>
