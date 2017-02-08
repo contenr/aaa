@@ -79,9 +79,8 @@
 		function end(e){
 			var et=e.timeStamp;
 			var dh=Math.abs(e.changedTouches[0].clientX-ch);
-			console.log(dh);
 			son.style.transition='transform .3s'
-			if(Math.abs(oh-ch)>cw/2||(et-dt>100&&dh>30)){
+			if(Math.abs(oh-ch)>cw/2){
 				if(oh-ch>0){
 					// 向右滑
 					index--;
