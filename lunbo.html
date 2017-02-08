@@ -54,7 +54,7 @@
 	}
 	// 下标
 	var index=0;
-	var t=setInterval(w,1000);
+	var t=setInterval(w,2000);
 	function w(){
 		index++;
 		if(index==divs.length){
@@ -101,7 +101,7 @@
 			}else{
 				son.style.transform='translate3d('+-(index*cw)+'px,0,0)';
 			}
-			t=setInterval(w,1000);
+			t=setInterval(w,2000);
 			// 移除end，move（每滑动会执行一次move，end）
 			son.removeEventListener('touchmove',move);
 			son.removeEventListener('touchend',end);
