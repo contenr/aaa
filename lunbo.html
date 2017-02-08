@@ -20,8 +20,6 @@
 	}
 	.son>div{
 		float:left;
-		/*如果有边框，图片下边会有空白，用line-height:0;或font-size:0;处理(是受line-height，font-size影响)*/
-		line-height:0;
 	}
 	img{
 		width:100%;
@@ -50,9 +48,8 @@
 	for(var i=0;i<divs.length;i++){
 		divs[i].style.width=cw+'px';
 	}
-	// 下标
 	var index=0;
-	var t=setInterval(w,2000);
+	var t=setInterval(w,1000);
 	function w(){
 		index++;
 		if(index==divs.length){
@@ -71,35 +68,29 @@
 		function move(e){
 			var th=e.targetTouches[0];
 			oh=th.clientX;
-			// oh-ch-index*cw是为了不让每次移动都从第一张开始
 			son.style.transform='translate3d('+(oh-ch-index*cw)+'px,0,0)';
 		}
 		function end(e){
 			var et=e.timeStamp;
 			var dh=Math.abs(e.changedTouches[0].clientX-ch);
 			son.style.transition='transform .3s'
-			if(Math.abs(oh-ch)>cw/2){
+			if(Math.abs(oh-ch)>cw/2||(et-dt>100&&dh>30)){
 				if(oh-ch>0){
-					// 向右滑
 					index--;
 				}else{
-					// 向左滑
 					index++;
 				}
 				if(index==divs.length){
-					// 最后一张拉回来
 					index=divs.length-1;
 				}
 				if(index==-1){
-					// 第一张拉回来
 					index=0;
 				}
 				son.style.transform='translate3d('+-(index*cw)+'px,0,0)';
 			}else{
 				son.style.transform='translate3d('+-(index*cw)+'px,0,0)';
 			}
-			t=setInterval(w,2000);
-			// 移除end，move（每滑动会执行一次move，end）
+			t=setInterval(w,1000);
 			son.removeEventListener('touchmove',move);
 			son.removeEventListener('touchend',end);
 		}
